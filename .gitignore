@@ -1,0 +1,13 @@
+classes
+.idea
+.gradle
+build/
+*.iml
+*.log
+*.db
+.asscache
+classes/
+# Ignore Gradle GUI config
+gradle-app.setting
+out/
+.DS_Store

@@ -1,0 +1,27 @@
+
+subprojects {
+    configurations.all {
+        // check for updates every build
+        resolutionStrategy.cacheChangingModulesFor 0, 'seconds'
+    }
+
+    repositories {
+        maven { url "https://repo.grails.org/grails/core" }
+        mavenCentral()
+    }
+
+    tasks.withType(Test) {
+        useJUnitPlatform()
+        testLogging {
+            events "passed", "skipped", "failed"
+
+            showExceptions true
+            exceptionFormat "full"
+            showCauses true
+            showStackTraces true
+        }
+    }
+    apply plugin: 'java'
+
+    compileJava.options.release = 17
+}

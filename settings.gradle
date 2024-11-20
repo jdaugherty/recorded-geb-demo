@@ -1,0 +1,15 @@
+include 'geb'
+
+include 'app1'
+
+include 'loadfirst'
+project(':loadfirst').projectDir = new File('plugins/loadfirst')
+
+include 'loadsecond'
+project(':loadsecond').projectDir = new File('plugins/loadsecond')
+
+include 'loadafter'
+project(':loadafter').projectDir = new File('plugins/loadafter')
+
+include 'issue11005'
+project(':issue11005').projectDir = new File('plugins/issue11005')
