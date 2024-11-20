@@ -7,7 +7,7 @@ The downside of this approach is each test creates a test container instead of u
 
 Attribution
 ===
-Tests based on the [Grails Funtional Test Repository](https://github.com/grails/grails-functional-tests).
+Tests based on the [Grails Functional Test Repository](https://github.com/grails/grails-functional-tests).
 
 Test Container functionality with Geb based on the [Grails Geb Plugin](https://github.com/grails/geb).
 
