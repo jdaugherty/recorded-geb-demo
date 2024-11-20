@@ -13,14 +13,26 @@ import java.time.LocalDateTime
 
 @Slf4j
 class ContainerGebRecordingExtension implements IGlobalExtension {
+    ContainerGebConfiguration configuration
+
+    @Override
+    void start() {
+        configuration = new ContainerGebConfiguration()
+    }
+
     @Override
     void visitSpec(SpecInfo spec) {
         if (isContainerizedGebSpec(spec)) {
             ContainerGebTestListener listener = new ContainerGebTestListener(spec, LocalDateTime.now())
             // TODO: ideally, we would initialize the web driver container once for all geb tests so we don't have to spin it up & down.
-            spec.addCleanupInterceptor {
-                listener.webDriverContainer = it.instance.getContainer()
+            spec.addSetupInterceptor {
+                ContainerGebSpec gebSpec = it.instance as ContainerGebSpec
+                gebSpec.initialize()
+                if(configuration.recording) {
+                    listener.webDriverContainer = gebSpec.webDriverContainer.withRecordingMode(configuration.recordingMode, configuration.recordingDirectory, configuration.recordingFormat)
+                }
             }
+
             spec.addListener(listener)
         }
     }

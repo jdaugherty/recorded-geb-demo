@@ -4,6 +4,7 @@ To enable video recording of tests, `afterTest()` must be called after each test
 
 The downside of this approach is each test creates a test container instead of using 1 test container for the life of the test run.  If we were to move the container bootstrapping to the extension, we could significantly speed up the runtime of these tests.  This would require moving configuration values from instance methods to annotations because of how spock is set up.  i.e. if you want a different hostname, you'd add an annotation to set the host name on the test and then when processing that spec you could start a different container if the hostname is different from the running one.
 
+After running tests, look in `app1/build/recordings` for the failed recordings.
 
 Attribution
 ===

@@ -75,23 +75,13 @@ abstract class ContainerGebSpec extends Specification implements ManagedGebTest,
     @Shared
     BrowserWebDriverContainer webDriverContainer
 
-    private BrowserWebDriverContainer setupRecording(BrowserWebDriverContainer container) {
-        String recordingDirectoryName = 'recordings'
-        def recordingDirectory = new File(recordingDirectoryName)
-        if(!recordingDirectory.exists()) {
-            log.info("Could not find `${recordingDirectoryName}` directory for recording.  Creating...")
-            recordingDirectory.mkdir()
-        }
-        else if(!recordingDirectory.isDirectory()) {
-            throw new IllegalStateException("Recording Directory name expected to be `${recordingDirectoryName}, but found file instead.")
-        }
-
-        container.withRecordingMode(BrowserWebDriverContainer.VncRecordingMode.RECORD_FAILING, recordingDirectory, VncRecordingContainer.VncRecordingFormat.MP4)
-    }
-
     @PackageScope
     void initialize() {
-        webDriverContainer = setupRecording(new BrowserWebDriverContainer())
+        if(webDriverContainer) {
+            return
+        }
+
+        webDriverContainer = new BrowserWebDriverContainer()
         Testcontainers.exposeHostPorts(port)
         webDriverContainer.tap {
             addExposedPort(this.port)
@@ -104,12 +94,6 @@ abstract class ContainerGebSpec extends Specification implements ManagedGebTest,
         WebDriver driver = new RemoteWebDriver(webDriverContainer.seleniumAddress, new ChromeOptions())
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(30))
         browser.driver = driver
-    }
-
-    void setup() {
-        if(!initialized) {
-            initialize()
-        }
         browser.baseUrl = "$protocol://$hostName:$port"
     }
 
@@ -182,9 +166,5 @@ abstract class ContainerGebSpec extends Specification implements ManagedGebTest,
 
     private boolean isHostNameChanged() {
         return hostNameFromContainer != DEFAULT_HOSTNAME_FROM_CONTAINER
-    }
-
-    private boolean isInitialized() {
-        webDriverContainer != null
     }
 }
